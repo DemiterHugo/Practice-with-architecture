@@ -4,32 +4,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musicademi.ImageArtist
-import com.example.musicademi.R
+import com.example.musicademi.*
 import com.example.musicademi.data.server.Artista
-import com.example.musicademi.inflate
-import com.example.musicademi.loadUrl
 import kotlinx.android.synthetic.main.view_artist.view.*
 import kotlin.properties.Delegates
 
 class ArtistAdapter(private var listener: (Artista) -> Unit): RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
 
-    var artists: List<Artista> by Delegates.observable(emptyList()){ _,old, new ->
-        DiffUtil.calculateDiff(object: DiffUtil.Callback(){
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                old[oldItemPosition].mbid == new[newItemPosition].mbid
-
-            override fun getOldListSize(): Int = old.size
-
-            override fun getNewListSize(): Int = new.size
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return old[oldItemPosition] == new[newItemPosition]
-            }
-        }).dispatchUpdatesTo(this)
-
-
-    }
+    var artists: List<Artista> by basicDiffUtil(
+            emptyList(),
+            areItemsTheSame = {old, new -> old.mbid == new.mbid } )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = parent.inflate(R.layout.view_artist,false)
