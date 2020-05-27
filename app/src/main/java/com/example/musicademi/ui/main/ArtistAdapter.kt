@@ -12,7 +12,7 @@ import com.example.musicademi.loadUrl
 import kotlinx.android.synthetic.main.view_artist.view.*
 import kotlin.properties.Delegates
 
-class ArtistAdapter: RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
+class ArtistAdapter(private var listener: (Artista) -> Unit): RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
 
     var artists: List<Artista> by Delegates.observable(emptyList()){ _,old, new ->
         DiffUtil.calculateDiff(object: DiffUtil.Callback(){
@@ -40,6 +40,7 @@ class ArtistAdapter: RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(artists[position])
+        holder.itemView.setOnClickListener { listener(artists[position]) }
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -48,7 +49,8 @@ class ArtistAdapter: RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
         fun bind(artist: Artista){
             itemView.artistTitle.text = artist.name
             image = ImageArtist(artist.name).imageArtist()
-            itemView.artistCover.loadUrl(image)
+            artist.image[2].text = image
+            itemView.artistCover.loadUrl(artist.image[2].text)
         }
     }
 }

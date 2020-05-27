@@ -28,7 +28,7 @@ data class Album(
 data class Artist(val name: String, val mbid: String, val url: String):Parcelable
 
 @Parcelize
-data class Image(@SerializedName("#text") val text:String, val size:String):Parcelable
+data class Image(@SerializedName("#text") var text:String, val size:String):Parcelable
 
 @Parcelize
 data class Atributtes(val artist:String, val page:String, val perPage: String, val totalPages:String, val total:String):Parcelable

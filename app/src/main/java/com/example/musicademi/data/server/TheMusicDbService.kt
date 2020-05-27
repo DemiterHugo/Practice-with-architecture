@@ -12,12 +12,14 @@ interface TheMusicDbService {
 
     //@GET("?method=artist.gettopalbums&artist=cher&api_key={api_key}&format=json")
 
-    @GET("?method=artist.gettopalbums&artist=cher&format=json")
+    @GET("?method=artist.gettopalbums&format=json")
 
-    suspend fun listTopAlbumsAsync(@Query("api_key") apiKey: String): TheTopAlbumDbResult
+    suspend fun listTopAlbumsAsync(@Query("artist") artista: String,
+                                   @Query("api_key") apiKey: String): TheTopAlbumDbResult
 
 
-    @GET("?method=geo.gettopartists&country=spain&format=json")
+    @GET("?method=geo.gettopartists&format=json")
 
-   suspend fun listTopArtistsAsync(@Query("api_key") apiKey: String): TheTopArtistsDbResult
+   suspend fun listTopArtistsAsync(@Query("country") region: String,
+                                   @Query("api_key") apiKey: String): TheTopArtistsDbResult
 }
