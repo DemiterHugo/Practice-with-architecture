@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.musicademi.R
 import com.example.musicademi.data.server.TheMusicDb
+import com.example.musicademi.model.ArtistsRepository
 import com.example.musicademi.toast
 import com.example.musicademi.startActivity
 
@@ -28,8 +29,8 @@ import kotlin.coroutines.resume
 
 class MainActivity : CoroutineScopeActivity() {
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val adapter = ArtistAdapter(){
+    private val artistsRepository: ArtistsRepository by lazy { ArtistsRepository(this) }
+    private val artistAdapter = ArtistAdapter(){
         startActivity<DetailActivity> {
             putExtra(DetailActivity.ARTIST,it)
         }
@@ -39,57 +40,12 @@ class MainActivity : CoroutineScopeActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
 
         launch {
-            val location = getLocation()
-            val artists = TheMusicDb.service.listTopArtistsAsync(getRegionFromLocation(location), getString(R.string.apy_key))
-            adapter.artists = artists.topartists.artists
-            textLocation.text = artists.topartists.attr.country
+            artistAdapter.artists = artistsRepository.findPopularArtist().topartists.artists
         }
-        recyclerArtist.adapter = adapter
+        recyclerArtist.adapter = artistAdapter
     }
-
-    private suspend fun getLocation(): Location? {
-        val success = requestCoarseLocationPermission()
-        toast(success.toString())
-        return if (success) findLastLocation() else null
-    }
-
-    private suspend fun findLastLocation(): Location? =
-        suspendCancellableCoroutine { continuation ->
-            fusedLocationClient.lastLocation
-                .addOnCompleteListener {
-                    continuation.resume(it.result)
-
-                }
-        }
-
-    private suspend fun requestCoarseLocationPermission(): Boolean {
-        return suspendCancellableCoroutine { continuation ->
-            Dexter
-                .withActivity(this@MainActivity)
-                .withPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(object : BasePermissionListener() {
-                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        super.onPermissionGranted(response)
-                        continuation.resume(true)
-                    }
-
-                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                        continuation.resume(false)
-                    }
-                }).check()
-        }
-    }
-
-    private fun getRegionFromLocation(location: Location?): String {
-        val geocoder = Geocoder(this@MainActivity)
-        val fromLocation = location?.let{
-            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        }
-        return fromLocation?.firstOrNull()?.countryCode?.toLowerCase()?: "spain"
-    }
-
 
 }
