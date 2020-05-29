@@ -10,7 +10,7 @@ class ArtistsRepository(activity: Activity) {
     private val regionRepository = RegionRepository(activity)
     private val apiKey = activity.getString(R.string.apy_key)
 
-    suspend fun findPopularArtist(): TheTopArtistsDbResult {
+    suspend fun findPopularArtists(): TheTopArtistsDbResult {
         return TheMusicDb.service.listTopArtistsAsync(regionRepository.findLastRegion(),apiKey)
     }
 

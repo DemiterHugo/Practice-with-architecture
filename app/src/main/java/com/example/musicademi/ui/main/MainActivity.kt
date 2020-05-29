@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.musicademi.R
 import com.example.musicademi.data.server.TheMusicDb
+import com.example.musicademi.model.AlbumsRepository
 import com.example.musicademi.model.ArtistsRepository
 import com.example.musicademi.toast
 import com.example.musicademi.startActivity
@@ -34,6 +35,7 @@ class MainActivity : CoroutineScopeActivity() {
         startActivity<DetailActivity> {
             putExtra(DetailActivity.ARTIST,it)
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +45,7 @@ class MainActivity : CoroutineScopeActivity() {
 
 
         launch {
-            artistAdapter.artists = artistsRepository.findPopularArtist().topartists.artists
+            artistAdapter.artists = artistsRepository.findPopularArtists().topartists.artists
         }
         recyclerArtist.adapter = artistAdapter
     }

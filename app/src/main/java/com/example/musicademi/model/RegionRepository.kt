@@ -18,7 +18,7 @@ class RegionRepository(activity: Activity) {
     }
 
     private val coarsePermissionChecker = PermissionChecker(activity,ACCESS_COARSE_LOCATION)
-    private val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
+    private val locationDataSource = PlayServicesLocationDataSource(activity)
     private val geocoder = Geocoder(activity)
 
 
@@ -26,17 +26,17 @@ class RegionRepository(activity: Activity) {
 
         private suspend fun findLastLocation(): Location?{
             val success = coarsePermissionChecker.request()
-            return if(success) lastLocationSuspended() else null
+            return if(success) locationDataSource.findLastLocation() else null
         }
 
-        @SuppressLint("MissingPermission")
+       /* @SuppressLint("MissingPermission")
         private suspend fun lastLocationSuspended(): Location? {
             return suspendCancellableCoroutine { continuation ->
                 fusedLocationClient.lastLocation.addOnCompleteListener {
                     continuation.resume(it.result)
                 }
             }
-        }
+        }*/
 
         private fun Location?.toRegion(): String{
             val addresses = this?.let {
