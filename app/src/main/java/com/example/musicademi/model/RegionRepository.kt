@@ -29,14 +29,7 @@ class RegionRepository(activity: Activity) {
             return if(success) locationDataSource.findLastLocation() else null
         }
 
-       /* @SuppressLint("MissingPermission")
-        private suspend fun lastLocationSuspended(): Location? {
-            return suspendCancellableCoroutine { continuation ->
-                fusedLocationClient.lastLocation.addOnCompleteListener {
-                    continuation.resume(it.result)
-                }
-            }
-        }*/
+
 
         private fun Location?.toRegion(): String{
             val addresses = this?.let {

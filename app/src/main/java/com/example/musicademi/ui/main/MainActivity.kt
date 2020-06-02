@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.musicademi.R
 import com.example.musicademi.data.server.TheMusicDb
@@ -42,12 +43,14 @@ class MainActivity : CoroutineScopeActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        recyclerArtist.adapter = artistAdapter
 
         launch {
+            progress.visibility = View.VISIBLE
             artistAdapter.artists = artistsRepository.findPopularArtists().topartists.artists
+            progress.visibility = View.GONE
         }
-        recyclerArtist.adapter = artistAdapter
+
     }
 
 }
