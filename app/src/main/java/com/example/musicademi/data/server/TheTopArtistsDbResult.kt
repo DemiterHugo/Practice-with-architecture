@@ -19,4 +19,5 @@ data class Artista(
     val image: List<Image>
 ):Parcelable
 
-data class Attributes(val country: String, val page: String, val perPage: String, val totalPages: String, val total: String)
+@Parcelize
+data class Attributes(val country: String, val page: String, val perPage: String, val totalPages: String, val total: String):Parcelable

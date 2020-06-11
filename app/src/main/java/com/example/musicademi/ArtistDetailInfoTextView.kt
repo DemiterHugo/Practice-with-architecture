@@ -17,7 +17,7 @@ class ArtistDetailInfoTextView @JvmOverloads constructor(
 
 
 
-        fun setMovie(artist: Artista) {
+        fun setArtist(artist: Artista) {
             with(artist) {
                 text = buildSpannedString {
 
