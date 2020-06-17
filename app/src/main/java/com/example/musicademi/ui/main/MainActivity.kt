@@ -3,50 +3,41 @@ package com.example.musicademi.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.example.musicademi.R
 import com.example.musicademi.data.server.Artista
 import com.example.musicademi.model.ArtistsRepository
 import com.example.musicademi.startActivity
 
 import com.example.musicademi.ui.detail.DetailActivity
+import com.example.musicademi.ui.main.MainViewModel.UiModel.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), MainPresenter.View {
+class MainActivity : AppCompatActivity() {
 
-    private val presenter by lazy {MainPresenter(ArtistsRepository(this))}
-    private val artistAdapter = ArtistAdapter(){
-        presenter.onArtistClicked(it)
-    }
+    private lateinit var viewModel: MainViewModel
+    private lateinit var artistAdapter: ArtistAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter.onCreate(this)
+        viewModel = ViewModelProvider(this, MainViewModelFactory(ArtistsRepository(this))).get()
+        artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
         recyclerArtist.adapter = artistAdapter
+        viewModel.model.observe(this, Observer (::updateUi))
     }
 
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun showProgress() {
-        progress.visibility = View.VISIBLE
-    }
-
-    override fun hideProgress() {
-        progress.visibility = View.GONE
-    }
-
-    override fun updateData(artists: List<Artista>) {
-        artistAdapter.artists = artists
-    }
-
-    override fun navigateTo(artista: Artista) {
-        startActivity<DetailActivity> {
-            putExtra(DetailActivity.ARTIST,artista)
+    fun updateUi( uiModel: MainViewModel.UiModel){
+        progress.visibility = if (uiModel == Loading) View.VISIBLE else View.GONE
+        when(uiModel){
+            is Content -> artistAdapter.artists = uiModel.artists
+            is Navigation -> startActivity<DetailActivity> {
+                putExtra(DetailActivity.ARTIST,uiModel.artist)
+            }
         }
     }
 
