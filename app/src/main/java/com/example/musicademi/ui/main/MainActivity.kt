@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.example.musicademi.R
 import com.example.musicademi.data.server.Artista
+import com.example.musicademi.getViewModel
 import com.example.musicademi.model.ArtistsRepository
 import com.example.musicademi.startActivity
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(ArtistsRepository(this))).get()
+         viewModel = getViewModel{ MainViewModel(ArtistsRepository(this))}
         artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
         recyclerArtist.adapter = artistAdapter
         viewModel.model.observe(this, Observer (::updateUi))

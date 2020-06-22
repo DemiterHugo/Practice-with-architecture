@@ -9,6 +9,7 @@ import androidx.lifecycle.get
 import com.example.musicademi.R
 import com.example.musicademi.data.server.Album
 import com.example.musicademi.data.server.Artista
+import com.example.musicademi.getViewModel
 import com.example.musicademi.loadUrl
 import com.example.musicademi.model.AlbumsRepository
 import com.example.musicademi.ui.main.AlbumsAdapter
@@ -31,7 +32,8 @@ class DetailActivity : AppCompatActivity(){
         setContentView(R.layout.activity_detail)
 
         artista = intent.getParcelableExtra(ARTIST) ?: throw (IllegalStateException("Movie not found"))
-        viewModel = ViewModelProvider(this,DetailViewModelFactory(AlbumsRepository(this),artista)).get()
+        //viewModel = ViewModelProvider(this,DetailViewModelFactory(AlbumsRepository(this),artista)).get()
+        viewModel = getViewModel { DetailViewModel(AlbumsRepository(this),artista) }
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))
     }

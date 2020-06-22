@@ -9,9 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.musicademi.model.ArtistsRepository
+import com.example.musicademi.ui.main.MainViewModel
 import kotlin.properties.Delegates
 
 fun Context.toast(message:String){
@@ -50,4 +56,15 @@ inline fun <reified T : Activity> Context.startActivity(body: Intent.() -> Unit)
             override fun getNewListSize(): Int = new.size
         }).dispatchUpdatesTo(this@basicDiffUtil)
     }
+
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T:ViewModel>FragmentActivity.getViewModel(crossinline factory: () -> T):T{
+
+    val vmFactory = object : ViewModelProvider.Factory {
+        override fun <U : ViewModel?> create(modelClass: Class<U>): U {
+            return factory() as U
+        }
+    }
+    return ViewModelProvider(this,vmFactory).get()
+}
 

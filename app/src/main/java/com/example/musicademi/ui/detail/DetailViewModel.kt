@@ -35,9 +35,3 @@ class DetailViewModel(private val albumsRepository: AlbumsRepository, private va
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class DetailViewModelFactory(private val albumsRepository: AlbumsRepository, private val artista: Artista): ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return DetailViewModel(albumsRepository, artista) as T
-    }
-}
