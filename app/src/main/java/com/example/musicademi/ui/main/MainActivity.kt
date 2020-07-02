@@ -1,11 +1,13 @@
 package com.example.musicademi.ui.main
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import com.example.musicademi.PermissionRequester
 import com.example.musicademi.R
 import com.example.musicademi.data.server.Artista
 import com.example.musicademi.getViewModel
@@ -21,23 +23,27 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var artistAdapter: ArtistAdapter
+    private val coarsePermissionRequester = PermissionRequester(this,ACCESS_COARSE_LOCATION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-         viewModel = getViewModel{ MainViewModel(ArtistsRepository(this))}
+         viewModel = getViewModel{ MainViewModel(ArtistsRepository(application))}
         artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
         recyclerArtist.adapter = artistAdapter
         viewModel.model.observe(this, Observer (::updateUi))
     }
 
-    fun updateUi( uiModel: MainViewModel.UiModel){
+    private fun updateUi(uiModel: MainViewModel.UiModel){
         progress.visibility = if (uiModel == Loading) View.VISIBLE else View.GONE
         when(uiModel){
             is Content -> artistAdapter.artists = uiModel.artists
             is Navigation -> startActivity<DetailActivity> {
                 putExtra(DetailActivity.ARTIST,uiModel.artist)
+            }
+            RequestLocationPermission -> coarsePermissionRequester.request {
+                viewModel.onCoarsePermissionRequested()
             }
         }
     }

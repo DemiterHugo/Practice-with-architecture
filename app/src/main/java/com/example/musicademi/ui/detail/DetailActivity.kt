@@ -32,8 +32,7 @@ class DetailActivity : AppCompatActivity(){
         setContentView(R.layout.activity_detail)
 
         artista = intent.getParcelableExtra(ARTIST) ?: throw (IllegalStateException("Movie not found"))
-        //viewModel = ViewModelProvider(this,DetailViewModelFactory(AlbumsRepository(this),artista)).get()
-        viewModel = getViewModel { DetailViewModel(AlbumsRepository(this),artista) }
+        viewModel = getViewModel { DetailViewModel(AlbumsRepository(application),artista) }
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))
     }

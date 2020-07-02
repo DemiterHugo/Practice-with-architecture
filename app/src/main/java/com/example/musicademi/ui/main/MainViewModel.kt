@@ -27,10 +27,13 @@ class MainViewModel(private val artistsRepository: ArtistsRepository) : ViewMode
         object Loading: UiModel()
         class Content(val artists: List<Artista>): UiModel()
         class Navigation(val artist: Artista): UiModel()
+        object RequestLocationPermission: UiModel()
     }
 
-
-    private fun refreshMain() {
+    private fun refreshMain(){
+        _model.value = UiModel.RequestLocationPermission
+    }
+    fun onCoarsePermissionRequested() {
         launch {
             _model.value = UiModel.Loading
             _model.value = UiModel.Content(artistsRepository.findPopularArtists().topartists.artists)
@@ -47,9 +50,3 @@ class MainViewModel(private val artistsRepository: ArtistsRepository) : ViewMode
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val artistsRepository: ArtistsRepository): ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MainViewModel(artistsRepository) as T
-    }
-}
