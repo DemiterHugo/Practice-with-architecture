@@ -33,15 +33,20 @@ class MainActivity : AppCompatActivity() {
         artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
         recyclerArtist.adapter = artistAdapter
         viewModel.model.observe(this, Observer (::updateUi))
+        viewModel.navigation.observe(this, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                startActivity<DetailActivity> {
+                    putExtra(DetailActivity.ARTIST,it)
+                }
+            }
+        })
     }
 
     private fun updateUi(uiModel: MainViewModel.UiModel){
         progress.visibility = if (uiModel == Loading) View.VISIBLE else View.GONE
         when(uiModel){
             is Content -> artistAdapter.artists = uiModel.artists
-            is Navigation -> startActivity<DetailActivity> {
-                putExtra(DetailActivity.ARTIST,uiModel.artist)
-            }
+
             RequestLocationPermission -> coarsePermissionRequester.request {
                 viewModel.onCoarsePermissionRequested()
             }

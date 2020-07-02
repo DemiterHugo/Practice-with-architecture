@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.musicademi.data.server.Artista
 import com.example.musicademi.model.ArtistsRepository
 import com.example.musicademi.startActivity
+import com.example.musicademi.ui.common.Event
 import com.example.musicademi.ui.common.Scope
 import com.example.musicademi.ui.detail.DetailActivity
 import kotlinx.coroutines.launch
@@ -22,11 +23,16 @@ class MainViewModel(private val artistsRepository: ArtistsRepository) : ViewMode
             if (_model.value == null) refreshMain()
             return _model
         }
+    private val _navigation = MutableLiveData<Event<Artista>>()
+    val navigation: LiveData<Event<Artista>>
+        get(){
+            return _navigation
+        }
+
 
     sealed class UiModel{
         object Loading: UiModel()
         class Content(val artists: List<Artista>): UiModel()
-        class Navigation(val artist: Artista): UiModel()
         object RequestLocationPermission: UiModel()
     }
 
@@ -41,7 +47,7 @@ class MainViewModel(private val artistsRepository: ArtistsRepository) : ViewMode
     }
 
     fun onArtistClicked(artista: Artista) {
-        _model.value = UiModel.Navigation(artista)
+        _navigation.value = Event(artista)
     }
 
     override fun onCleared() {
