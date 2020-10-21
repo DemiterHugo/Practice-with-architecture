@@ -1,4 +1,4 @@
-package com.example.musicademi.data.server
+package com.example.musicademi.model.server
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,7 +19,8 @@ object TheMusicDb {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .run {
-            create<TheMusicDbService>(TheMusicDbService::class.java)
+            create<TheMusicDbService>(
+                TheMusicDbService::class.java)
         }
 
 

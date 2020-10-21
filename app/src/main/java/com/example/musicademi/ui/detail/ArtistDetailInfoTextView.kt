@@ -1,11 +1,10 @@
-package com.example.musicademi
+package com.example.musicademi.ui.detail
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.TextView
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
-import com.example.musicademi.data.server.Artista
+import com.example.musicademi.model.server.Artista
 
 
 

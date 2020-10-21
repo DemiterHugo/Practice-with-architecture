@@ -3,13 +3,10 @@ package com.example.musicademi.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.musicademi.data.server.Artista
-import com.example.musicademi.model.ArtistsRepository
-import com.example.musicademi.startActivity
+import com.example.musicademi.model.server.Artista
+import com.example.musicademi.model.server.ArtistsRepository
 import com.example.musicademi.ui.common.Event
 import com.example.musicademi.ui.common.Scope
-import com.example.musicademi.ui.detail.DetailActivity
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val artistsRepository: ArtistsRepository) : ViewModel(), Scope by Scope.Iml() {
@@ -28,7 +25,6 @@ class MainViewModel(private val artistsRepository: ArtistsRepository) : ViewMode
         get(){
             return _navigation
         }
-
 
     sealed class UiModel{
         object Loading: UiModel()

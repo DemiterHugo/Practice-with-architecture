@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicademi.R
-import com.example.musicademi.data.server.Album
-import com.example.musicademi.inflate
-import com.example.musicademi.loadUrl
+import com.example.musicademi.model.server.Album
+import com.example.musicademi.ui.common.inflate
+import com.example.musicademi.ui.common.loadUrl
 import kotlinx.android.synthetic.main.view_album.view.*
 import kotlin.properties.Delegates
 
 class AlbumsAdapter: RecyclerView.Adapter<AlbumsAdapter.MyViewHolder>() {
 
-    var albums: List<Album> by Delegates.observable(emptyList()){ _, old,new ->
+    var albums: List<Album> by Delegates.observable(emptyList()){ _, old, new ->
         DiffUtil.calculateDiff(object: DiffUtil.Callback(){
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
                 old[oldItemPosition].mbid == new[newItemPosition].mbid

@@ -1,10 +1,9 @@
-package com.example.musicademi.model
+package com.example.musicademi.model.server
 
-import android.app.Activity
 import android.app.Application
 import com.example.musicademi.R
-import com.example.musicademi.data.server.TheMusicDb
-import com.example.musicademi.data.server.TheTopAlbumDbResult
+import com.example.musicademi.model.server.TheMusicDb
+import com.example.musicademi.model.server.TheTopAlbumDbResult
 import com.example.musicademi.ui.common.Scope
 
 class AlbumsRepository(application: Application): Scope by Scope.Iml() {

@@ -1,5 +1,7 @@
-package com.example.musicademi.data.server
+package com.example.musicademi.model.server
 
+import com.example.musicademi.model.server.TheTopAlbumDbResult
+import com.example.musicademi.model.server.TheTopArtistsDbResult
 import retrofit2.http.*
 
 interface TheMusicDbService {

@@ -1,4 +1,4 @@
-package com.example.musicademi
+package com.example.musicademi.ui.common
 
 import android.app.Activity
 import android.content.Context
@@ -16,9 +16,8 @@ import androidx.lifecycle.get
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.musicademi.model.ArtistsRepository
-import com.example.musicademi.ui.main.MainViewModel
 import kotlin.properties.Delegates
+import kotlin.properties.ReadWriteProperty
 
 fun Context.toast(message:String){
     Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
@@ -40,22 +39,23 @@ inline fun <reified T : Activity> Context.startActivity(body: Intent.() -> Unit)
 
   inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffUtil(
       initialValue: List<T>,
-      crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
-      crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
-) =
-    Delegates.observable(initialValue) { _, old, new ->
+      crossinline areItemsTheSamee: (T, T) -> Boolean = { old, new -> old == new },
+      crossinline areContentsTheSamee: (T, T) -> Boolean = { old, new -> old == new }
+): ReadWriteProperty<Any?, List<T>> {
+      return Delegates.observable(initialValue) { _, old, new ->
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                areItemsTheSame(old[oldItemPosition], new[newItemPosition])
+                areItemsTheSamee(old[oldItemPosition], new[newItemPosition])
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                areContentsTheSame(old[oldItemPosition], new[newItemPosition])
+                areContentsTheSamee(old[oldItemPosition], new[newItemPosition])
 
             override fun getOldListSize(): Int = old.size
 
             override fun getNewListSize(): Int = new.size
         }).dispatchUpdatesTo(this@basicDiffUtil)
     }
+}
 
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T:ViewModel>FragmentActivity.getViewModel(crossinline factory: () -> T):T{

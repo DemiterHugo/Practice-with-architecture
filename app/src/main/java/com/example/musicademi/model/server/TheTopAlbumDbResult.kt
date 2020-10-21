@@ -1,11 +1,11 @@
-package com.example.musicademi.data.server
+package com.example.musicademi.model.server
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 data class TheTopAlbumDbResult(
-    val topalbums:TopAlbums
+    val topalbums: TopAlbums
 )
 
 @Parcelize
@@ -20,7 +20,7 @@ data class Album(
     val playcount:Int,
     val mbid:String,
     val url:String,
-    val artist:Artist,
+    val artist: Artist,
     val image:List<Image>
 ):Parcelable
 

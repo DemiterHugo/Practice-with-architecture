@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import com.example.musicademi.PermissionRequester
 import com.example.musicademi.R
-import com.example.musicademi.data.server.Artista
-import com.example.musicademi.getViewModel
-import com.example.musicademi.model.ArtistsRepository
-import com.example.musicademi.startActivity
+import com.example.musicademi.ui.common.getViewModel
+import com.example.musicademi.model.server.ArtistsRepository
+import com.example.musicademi.ui.common.startActivity
 
 import com.example.musicademi.ui.detail.DetailActivity
 import com.example.musicademi.ui.main.MainViewModel.UiModel.*
@@ -29,7 +26,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-         viewModel = getViewModel{ MainViewModel(ArtistsRepository(application))}
+         viewModel = getViewModel{
+             MainViewModel(ArtistsRepository(application))
+         }
         artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
         recyclerArtist.adapter = artistAdapter
         viewModel.model.observe(this, Observer (::updateUi))
@@ -49,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
             RequestLocationPermission -> coarsePermissionRequester.request {
                 viewModel.onCoarsePermissionRequested()
+
             }
         }
     }

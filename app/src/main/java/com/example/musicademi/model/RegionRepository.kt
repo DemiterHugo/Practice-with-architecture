@@ -1,16 +1,9 @@
 package com.example.musicademi.model
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
 import android.location.Geocoder
 import android.location.Location
-import com.example.musicademi.toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
 
 class RegionRepository(application: Application) {
 

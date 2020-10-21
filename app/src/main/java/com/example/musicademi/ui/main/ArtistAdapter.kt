@@ -2,18 +2,19 @@ package com.example.musicademi.ui.main
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicademi.*
-import com.example.musicademi.data.server.Artista
+import com.example.musicademi.model.server.Artista
+import com.example.musicademi.ui.common.basicDiffUtil
+import com.example.musicademi.ui.common.inflate
+import com.example.musicademi.ui.common.loadUrl
 import kotlinx.android.synthetic.main.view_artist.view.*
-import kotlin.properties.Delegates
 
 class ArtistAdapter(private var listener: (Artista) -> Unit): RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
 
     var artists: List<Artista> by basicDiffUtil(
             emptyList(),
-            areItemsTheSame = {old, new -> old.mbid == new.mbid } )
+            areItemsTheSamee = {old, new -> old.mbid == new.mbid } )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = parent.inflate(R.layout.view_artist,false)

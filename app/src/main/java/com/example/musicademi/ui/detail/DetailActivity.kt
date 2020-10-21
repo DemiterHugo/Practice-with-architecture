@@ -4,14 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import com.example.musicademi.R
-import com.example.musicademi.data.server.Album
-import com.example.musicademi.data.server.Artista
-import com.example.musicademi.getViewModel
-import com.example.musicademi.loadUrl
-import com.example.musicademi.model.AlbumsRepository
+import com.example.musicademi.model.server.Artista
+import com.example.musicademi.ui.common.getViewModel
+import com.example.musicademi.ui.common.loadUrl
+import com.example.musicademi.model.server.AlbumsRepository
 import com.example.musicademi.ui.main.AlbumsAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -32,7 +29,10 @@ class DetailActivity : AppCompatActivity(){
         setContentView(R.layout.activity_detail)
 
         artista = intent.getParcelableExtra(ARTIST) ?: throw (IllegalStateException("Movie not found"))
-        viewModel = getViewModel { DetailViewModel(AlbumsRepository(application),artista) }
+        viewModel = getViewModel { DetailViewModel(
+            AlbumsRepository(
+                application
+            ),artista) }
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))
     }

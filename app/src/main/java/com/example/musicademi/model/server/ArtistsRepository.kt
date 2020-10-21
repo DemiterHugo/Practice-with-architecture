@@ -1,10 +1,8 @@
-package com.example.musicademi.model
+package com.example.musicademi.model.server
 
-import android.app.Activity
 import android.app.Application
 import com.example.musicademi.R
-import com.example.musicademi.data.server.TheMusicDb
-import com.example.musicademi.data.server.TheTopArtistsDbResult
+import com.example.musicademi.model.RegionRepository
 
 class ArtistsRepository(application: Application) {
 

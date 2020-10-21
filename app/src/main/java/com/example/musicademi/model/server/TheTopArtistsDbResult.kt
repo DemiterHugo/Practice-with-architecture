@@ -1,4 +1,4 @@
-package com.example.musicademi.data.server
+package com.example.musicademi.model.server
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -20,4 +20,10 @@ data class Artista(
 ):Parcelable
 
 @Parcelize
-data class Attributes(val country: String, val page: String, val perPage: String, val totalPages: String, val total: String):Parcelable
+data class Attributes(
+    val country: String,
+    val page: String,
+    val perPage: String,
+    val totalPages: String,
+    val total: String
+):Parcelable
