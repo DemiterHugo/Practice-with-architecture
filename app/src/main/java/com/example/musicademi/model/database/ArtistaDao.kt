@@ -41,12 +41,20 @@ interface ArtistaDao {
     fun getAllAlbums(): List<AlbumDb>
 
     @Transaction
+    @Query("SELECT * FROM Album WHERE nameArtistaShort = :nameArtist")
+    fun getAllAlbumsByName(nameArtist: String): List<AlbumDb>
+
+    @Transaction
     @Query( "SELECT * FROM Album WHERE idAlbum = :id")
     fun findByIdAlbum(id: Int): AlbumDb
 
     @Transaction
     @Query("SELECT COUNT(idAlbum) FROM Album")
     fun albumCount(): Int
+
+    @Transaction
+    @Query("SELECT COUNT(idAlbum) FROM Album WHERE nameArtistaShort = :nameArtist")
+    fun albumCountByName(nameArtist: String):Int
 
     @Transaction
     @Query("SELECT * FROM Artista WHERE mbidArtista = :mbid")

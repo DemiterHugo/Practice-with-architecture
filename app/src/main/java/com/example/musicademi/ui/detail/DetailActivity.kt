@@ -35,6 +35,7 @@ class DetailActivity : AppCompatActivity(){
         albumsAdapter = AlbumsAdapter()
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))
+        artistDetailFavorite.setOnClickListener { viewModel.onFavoriteClicked() }
     }
 
     private fun updateUi(uiModel: DetailViewModel.UiModel) {
@@ -44,6 +45,7 @@ class DetailActivity : AppCompatActivity(){
                 artistDetailToolbar.title = this.artista.name
                 artistDetailImage.loadUrl(this.imageArtist.get(2).text)
                 artistDetailInfo.setArtist(this)
+                    artistDetailFavorite.setImageDrawable(getDrawable(if (this.artista.favorite)R.drawable.ic_favorite_on else R.drawable.ic_favorite_off))
             }
             is DetailViewModel.UiModel.Content -> albumsAdapter.albums = uiModel.albums
         }

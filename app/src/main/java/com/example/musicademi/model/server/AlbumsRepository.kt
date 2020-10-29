@@ -3,6 +3,7 @@ package com.example.musicademi.model.server
 import com.example.musicademi.MusicApp
 import com.example.musicademi.R
 import com.example.musicademi.model.database.*
+import com.example.musicademi.model.database.Artista
 import com.example.musicademi.ui.common.Scope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,11 +21,11 @@ class AlbumsRepository(musicApp: MusicApp) {
     suspend fun findPopularAlbums(name: String):List<AlbumDb>{
         return withContext(Dispatchers.IO){
             with(db.artistaDao()){
-                if (albumCount() <= 0){
+                if (albumCountByName(name) <= 0){
                     val albumsServer =TheMusicDb.service.listTopAlbumsAsync(name,apiKey).topalbums.albums
                     insertAlbums(albumsServer.map { album -> convertToAlbumDb(album) })
                 }
-                getAllAlbums()
+                getAllAlbumsByName(name)
             }
         }
     }
@@ -42,6 +43,12 @@ class AlbumsRepository(musicApp: MusicApp) {
     suspend fun findByMbidArtistDb(mbid: String): ArtistDb {
         return withContext(Dispatchers.IO){
             db.artistaDao().findByMbidArtistDb(mbid)
+        }
+    }
+
+    suspend fun updateArtist(artista: Artista){
+        withContext(Dispatchers.IO){
+            db.artistaDao().updateArtista(artista)
         }
     }
 
