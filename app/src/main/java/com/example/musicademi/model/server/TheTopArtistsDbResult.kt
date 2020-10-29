@@ -20,6 +20,9 @@ data class Artista(
 ):Parcelable
 
 @Parcelize
+data class Image(@SerializedName("#text") var text:String, val size:String):Parcelable
+
+@Parcelize
 data class Attributes(
     val country: String,
     val page: String,

@@ -6,18 +6,55 @@ import androidx.room.*
 @Dao
 interface ArtistaDao {
 
+    @Transaction
     @Query("SELECT * FROM Artista")
-    fun getAllArtista(): List<Artista>
+    fun getAllArtista(): List<ArtistDb>
 
-    @Query( "SELECT * FROM Artista WHERE id = :id")
-    fun findById(id: Int): Artista
+    @Transaction
+    @Query( "SELECT * FROM Artista WHERE idArtist = :id")
+    fun findByIdArtista(id: Int): ArtistDb
 
-    @Query("SELECT COUNT(id) FROM Artista")
+    @Transaction
+    @Query("SELECT COUNT(idArtist) FROM Artista")
     fun artistaCount(): Int
 
+    @Transaction
     @Insert( onConflict = OnConflictStrategy.IGNORE)
     fun insertArtistas(artistas: List<Artista>)
 
+    @Transaction
+    @Insert( onConflict = OnConflictStrategy.IGNORE)
+    fun insertAlbums(albums: List<Album>)
+
+
+    @Insert( onConflict = OnConflictStrategy.IGNORE)
+    fun insertImages(images: Image)
+
+    @Transaction
     @Update
     fun updateArtista(artista: Artista)
+
+    //-----------------------------------------------------
+
+    @Transaction
+    @Query("SELECT * FROM Album")
+    fun getAllAlbums(): List<AlbumDb>
+
+    @Transaction
+    @Query( "SELECT * FROM Album WHERE idAlbum = :id")
+    fun findByIdAlbum(id: Int): AlbumDb
+
+    @Transaction
+    @Query("SELECT COUNT(idAlbum) FROM Album")
+    fun albumCount(): Int
+
+    @Transaction
+    @Query("SELECT * FROM Artista WHERE mbidArtista = :mbid")
+    fun findByMbidArtistDb(mbid: String): ArtistDb
+
+
+
+    @Transaction
+    @Update
+    fun updateAlbum(album: Album)
 }

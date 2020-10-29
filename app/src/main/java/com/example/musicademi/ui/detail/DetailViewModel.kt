@@ -2,17 +2,17 @@ package com.example.musicademi.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.musicademi.model.database.AlbumDb
+import com.example.musicademi.model.database.ArtistDb
 import com.example.musicademi.model.server.Album
 import com.example.musicademi.model.server.Artista
 import com.example.musicademi.model.server.AlbumsRepository
-import com.example.musicademi.ui.common.Scope
+import com.example.musicademi.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val albumsRepository: AlbumsRepository, private val artista: Artista) :ViewModel(), Scope by Scope.Iml() {
-    init {
-        initScope()
-    }
+class DetailViewModel(private val albumsRepository: AlbumsRepository, private val Mbidbartista: String) :ScopedViewModel() {
+
+    private lateinit var artistaDb: ArtistDb
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -22,15 +22,22 @@ class DetailViewModel(private val albumsRepository: AlbumsRepository, private va
     }
 
     sealed class UiModel{
-        class Content(val albums:List<Album>): UiModel()
-        class TheArtist(val artista: Artista): UiModel()
+        class Content(val albums:List<AlbumDb>): UiModel()
+        class TheArtist(val artistaDb: ArtistDb): UiModel()
     }
 
     fun refreshDetail (){
         launch {
-            _model.value = UiModel.TheArtist(artista)
-            _model.value=UiModel.Content(albumsRepository.findPopularAlbums(artista.name).topalbums.albums)
+            artistaDb = albumsRepository.findByMbidArtistDb(Mbidbartista)
+            _model.value = UiModel.TheArtist(artistaDb)
+            _model.value=UiModel.Content(
+                albumsRepository.findPopularAlbums(artistaDb.artista.name))
         }
     }
+
+    /*override fun onCleared() {
+        cancelScope()
+        super.onCleared()
+    }*/
 }
 

@@ -1,7 +1,7 @@
 package com.example.musicademi
 
 
-class ImageArtist(private var name: String) {
+class ImageArtist() {
 
     val imagenes: List<String>  = listOf(
         "David Bowie",
@@ -107,7 +107,7 @@ class ImageArtist(private var name: String) {
 
     )
 
-    fun imageArtist():String{
+    fun imageArtist(name: String):String{
         var indice=0
         for ((index, elem) in imagenes.withIndex()){
             indice = (if (name == elem) {

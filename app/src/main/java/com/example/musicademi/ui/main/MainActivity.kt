@@ -9,6 +9,7 @@ import com.example.musicademi.PermissionRequester
 import com.example.musicademi.R
 import com.example.musicademi.ui.common.getViewModel
 import com.example.musicademi.model.server.ArtistsRepository
+import com.example.musicademi.ui.common.app
 import com.example.musicademi.ui.common.startActivity
 
 import com.example.musicademi.ui.detail.DetailActivity
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
          viewModel = getViewModel{
-             MainViewModel(ArtistsRepository(application))
+             MainViewModel(ArtistsRepository(app))
          }
         artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
         recyclerArtist.adapter = artistAdapter
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.navigation.observe(this, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 startActivity<DetailActivity> {
-                    putExtra(DetailActivity.ARTIST,it)
+                    putExtra(DetailActivity.ARTIST,it.artista.mbid)
                 }
             }
         })

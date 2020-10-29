@@ -9,8 +9,10 @@ import com.example.musicademi.model.server.Artista
 import com.example.musicademi.ui.common.getViewModel
 import com.example.musicademi.ui.common.loadUrl
 import com.example.musicademi.model.server.AlbumsRepository
+import com.example.musicademi.ui.common.app
 import com.example.musicademi.ui.main.AlbumsAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
+import java.lang.IllegalStateException
 
 class DetailActivity : AppCompatActivity(){
 
@@ -18,9 +20,8 @@ class DetailActivity : AppCompatActivity(){
         const val ARTIST = "DetailActivity:artist"
     }
 
-    private lateinit var artista: Artista
     private lateinit var viewModel: DetailViewModel
-    private var albumsAdapter = AlbumsAdapter()
+    private lateinit var albumsAdapter: AlbumsAdapter
 
 
     @SuppressLint("SetTextI18n")
@@ -28,20 +29,20 @@ class DetailActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        artista = intent.getParcelableExtra(ARTIST) ?: throw (IllegalStateException("Movie not found"))
-        viewModel = getViewModel { DetailViewModel(
-            AlbumsRepository(
-                application
-            ),artista) }
+        viewModel = getViewModel {
+            DetailViewModel(AlbumsRepository(app),intent.getStringExtra(ARTIST) ?: throw (IllegalStateException("id not found")))
+        }
+        albumsAdapter = AlbumsAdapter()
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))
     }
 
     private fun updateUi(uiModel: DetailViewModel.UiModel) {
         when(uiModel){
-            is DetailViewModel.UiModel.TheArtist -> with(uiModel.artista){
-                artistDetailToolbar.title = this.name
-                artistDetailImage.loadUrl(this.image[2].text)
+            is DetailViewModel.UiModel.TheArtist ->
+                with(uiModel.artistaDb){
+                artistDetailToolbar.title = this.artista.name
+                artistDetailImage.loadUrl(this.imageArtist.get(2).text)
                 artistDetailInfo.setArtist(this)
             }
             is DetailViewModel.UiModel.Content -> albumsAdapter.albums = uiModel.albums

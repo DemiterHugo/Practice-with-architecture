@@ -16,6 +16,7 @@ import androidx.lifecycle.get
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.musicademi.MusicApp
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty
 
@@ -67,4 +68,8 @@ inline fun <reified T:ViewModel>FragmentActivity.getViewModel(crossinline factor
     }
     return ViewModelProvider(this,vmFactory).get()
 }
+
+
+val Context.app: MusicApp
+    get() = applicationContext as MusicApp
 
