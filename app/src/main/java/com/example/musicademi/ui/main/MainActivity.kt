@@ -5,10 +5,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.demiter.data.repository.RegionRepository
+import com.demiter.data.repository.ArtistRepository
+import com.demiter.usescases.GetPopularArtists
 import com.example.musicademi.PermissionRequester
 import com.example.musicademi.R
+import com.example.musicademi.model.AndroidPermissionChecker
+import com.example.musicademi.model.PlayServicesLocationDataSource
+import com.example.musicademi.model.database.RoomDataSource
+import com.example.musicademi.model.server.ServerDataSource
 import com.example.musicademi.ui.common.getViewModel
-import com.example.musicademi.model.server.ArtistsRepository
 import com.example.musicademi.ui.common.app
 import com.example.musicademi.ui.common.startActivity
 
@@ -28,15 +34,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
          viewModel = getViewModel{
-             MainViewModel(ArtistsRepository(app))
+             MainViewModel(
+                 GetPopularArtists(
+                     ArtistRepository(RoomDataSource(app.db),
+                                        ServerDataSource(),
+                                        RegionRepository(PlayServicesLocationDataSource(app),
+                                                            AndroidPermissionChecker(app)),
+                                        app.getString(R.string.apy_key)
+                     )
+                 )
+             )
          }
-        artistAdapter = ArtistAdapter(viewModel::onArtistClicked)
+        artistAdapter = ArtistAdapter { viewModel.onArtistClicked(it) }
         recyclerArtist.adapter = artistAdapter
         viewModel.model.observe(this, Observer (::updateUi))
         viewModel.navigation.observe(this, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 startActivity<DetailActivity> {
-                    putExtra(DetailActivity.ARTIST,it.artista.mbid)
+                    putExtra(DetailActivity.MBID,it.mbid)
+                    putExtra(DetailActivity.NAME,it.name)
                 }
             }
         })

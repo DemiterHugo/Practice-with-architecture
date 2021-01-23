@@ -2,17 +2,25 @@ package com.example.musicademi.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.demiter.domain.Album
+import com.demiter.domain.Artista
+import com.demiter.usescases.FindArtistByMbid
+import com.demiter.usescases.GetPopularAlbums
+import com.demiter.usescases.GetPopularArtists
+import com.demiter.usescases.ToggleArtistFavorite
 import com.example.musicademi.model.database.AlbumDb
 import com.example.musicademi.model.database.ArtistDb
-import com.example.musicademi.model.server.Album
-import com.example.musicademi.model.database.Artista
-import com.example.musicademi.model.server.AlbumsRepository
 import com.example.musicademi.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val albumsRepository: AlbumsRepository, private val Mbidbartista: String) :ScopedViewModel() {
+class DetailViewModel(
+    private val mbidbartista: String,
+    private val findArtistByMbid: FindArtistByMbid,
+    private val getPopularAlbums: GetPopularAlbums,
+    private val toggleArtistFavorite: ToggleArtistFavorite
+) :ScopedViewModel() {
 
-    private lateinit var artistaDb: ArtistDb
+
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -22,33 +30,31 @@ class DetailViewModel(private val albumsRepository: AlbumsRepository, private va
     }
 
     sealed class UiModel(){
-        class Content(val albums:List<AlbumDb>): UiModel()
-        class TheArtist(val artistaDb: ArtistDb): UiModel()
+        class Content(val albums:List<Album>): UiModel()
+        class TheArtist(val artista: Artista): UiModel()
     }
 
     private fun refreshDetail (){
         launch {
-            artistaDb = albumsRepository.findByMbidArtistDb(Mbidbartista)
-            _model.value = UiModel.TheArtist(artistaDb)
-            _model.value=UiModel.Content(
-                albumsRepository.findPopularAlbums(artistaDb.artista.name))
+
+            _model.value = UiModel.TheArtist(findArtistByMbid.invoke(mbidbartista))
+            val l = UiModel.Content(getPopularAlbums.invoke())
+            l
+            _model.value = l
         }
     }
 
     fun onFavoriteClicked(){
         launch {
-            artistaDb.let {
-                val updateArtist =it.artista.copy(favorite = !it.artista.favorite)
-                albumsRepository.updateArtist(updateArtist)
-                _model.value = UiModel.TheArtist(albumsRepository.findByMbidArtistDb(Mbidbartista))
-            }
+                _model.value = UiModel.TheArtist(toggleArtistFavorite.invoke(findArtistByMbid.invoke(mbidbartista)))
         }
-
     }
+
+}
 
     /*override fun onCleared() {
         cancelScope()
         super.onCleared()
     }*/
-}
+
 

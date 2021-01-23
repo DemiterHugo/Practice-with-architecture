@@ -7,6 +7,10 @@ import androidx.room.*
 interface ArtistaDao {
 
     @Transaction
+    @Query("SELECT * FROM Image")
+    fun getAllImages(): List<Image>
+
+    @Transaction
     @Query("SELECT * FROM Artista")
     fun getAllArtista(): List<ArtistDb>
 
@@ -14,11 +18,11 @@ interface ArtistaDao {
     @Query( "SELECT * FROM Artista WHERE idArtist = :id")
     fun findByIdArtista(id: Int): ArtistDb
 
-    @Transaction
+
     @Query("SELECT COUNT(idArtist) FROM Artista")
     fun artistaCount(): Int
 
-    @Transaction
+    //@Transaction
     @Insert( onConflict = OnConflictStrategy.IGNORE)
     fun insertArtistas(artistas: List<Artista>)
 
@@ -29,6 +33,9 @@ interface ArtistaDao {
 
     @Insert( onConflict = OnConflictStrategy.IGNORE)
     fun insertImages(images: Image)
+
+    @Insert( onConflict = OnConflictStrategy.IGNORE)
+    fun insertImagesList(images: List<Image>)
 
     @Transaction
     @Update

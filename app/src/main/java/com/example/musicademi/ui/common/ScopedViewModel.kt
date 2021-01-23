@@ -11,7 +11,7 @@ abstract class ScopedViewModel: ViewModel(), Scope by Scope.Iml() {
 
     @CallSuper
     override fun onCleared() {
-        cancelScope()
+        destroyScope()
         super.onCleared()
     }
 }

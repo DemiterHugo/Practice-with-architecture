@@ -4,9 +4,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.demiter.domain.Album
 import com.example.musicademi.R
-import com.example.musicademi.model.database.AlbumDb
-import com.example.musicademi.model.server.Album
 import com.example.musicademi.ui.common.basicDiffUtil
 import com.example.musicademi.ui.common.inflate
 import com.example.musicademi.ui.common.loadUrl
@@ -29,8 +28,8 @@ class AlbumsAdapter: RecyclerView.Adapter<AlbumsAdapter.MyViewHolder>() {
         }).dispatchUpdatesTo(this)
     }*/
 
-    var albums: List<AlbumDb> by basicDiffUtil(
-        emptyList(), areItemsTheSamee = {old, new, -> old.album.mbid == new.album.mbid}
+    var albums: List<Album> by basicDiffUtil(
+        emptyList(), areItemsTheSamee = {old, new, -> old.name == new.name}
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -45,9 +44,9 @@ class AlbumsAdapter: RecyclerView.Adapter<AlbumsAdapter.MyViewHolder>() {
     }
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(albumDb: AlbumDb){
-            itemView.albumTitle.text = albumDb.album.name
-            itemView.albumCover.loadUrl(albumDb.imageAlbumDb[3].text)
+        fun bind(album: Album){
+            itemView.albumTitle.text = album.name
+            itemView.albumCover.loadUrl(album.image[1].text)
         }
 
     }

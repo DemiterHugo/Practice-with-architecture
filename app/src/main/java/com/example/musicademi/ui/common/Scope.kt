@@ -16,7 +16,9 @@ interface Scope: CoroutineScope {
         job = SupervisorJob()
     }
 
-    fun cancelScope() = job.cancel()
+    fun destroyScope(){
+        job.cancel()
+    }
 
     class Iml() : Scope{
         override lateinit var job: Job

@@ -2,15 +2,16 @@ package com.example.musicademi.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.demiter.usescases.GetPopularArtists
 import com.example.musicademi.model.database.ArtistDb
-import com.example.musicademi.model.database.Artista
-import com.example.musicademi.model.server.ArtistsRepository
 import com.example.musicademi.ui.common.Event
 import com.example.musicademi.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
+import com.demiter.domain.Artista
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MainViewModel(private val artistsRepository: ArtistsRepository): ScopedViewModel() {
+class MainViewModel(private val getPopularArtists: GetPopularArtists): ScopedViewModel() {
 
 
     private val _model = MutableLiveData<UiModel>()
@@ -19,15 +20,19 @@ class MainViewModel(private val artistsRepository: ArtistsRepository): ScopedVie
             if (_model.value == null) refreshMain()
             return _model
         }
-    private val _navigation = MutableLiveData<Event<ArtistDb>>()
-    val navigation: LiveData<Event<ArtistDb>>
+    private val _navigation = MutableLiveData<Event<Artista>>()
+    val navigation: LiveData<Event<Artista>>
         get(){
             return _navigation
         }
 
+    init {
+        initScope()
+    }
+
     sealed class UiModel{
         object Loading: UiModel()
-        class Content(val artists: List<ArtistDb>): UiModel()
+        class Content(val artists: List<Artista>): UiModel()
         object RequestLocationPermission: UiModel()
     }
 
@@ -36,18 +41,18 @@ class MainViewModel(private val artistsRepository: ArtistsRepository): ScopedVie
     }
     fun onCoarsePermissionRequested() {
         launch {
-            _model.value = UiModel.Loading
-            _model.value = UiModel.Content(artistsRepository.findPopularArtists())
+                _model.value = UiModel.Loading
+                _model.value = UiModel.Content(getPopularArtists.invoke())
         }
     }
 
-    fun onArtistClicked(artista: ArtistDb) {
+    fun onArtistClicked(artista: Artista) {
         _navigation.value = Event(artista)
     }
 
-    /*override fun onCleared() {
-        cancelScope()
+    override fun onCleared() {
+        destroyScope()
         super.onCleared()
-    }*/
+    }
 }
 

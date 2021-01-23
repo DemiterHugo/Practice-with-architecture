@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
-import com.example.musicademi.model.database.ArtistDb
-import com.example.musicademi.model.server.Artista
-
+import com.demiter.domain.Artista
 
 
 class ArtistDetailInfoTextView @JvmOverloads constructor(
@@ -17,21 +15,21 @@ class ArtistDetailInfoTextView @JvmOverloads constructor(
 
 
 
-        fun setArtist(artist: ArtistDb) {
+        fun setArtist(artist: Artista) {
             with(artist) {
                 text = buildSpannedString {
 
                     bold { append("Name: ") }
-                    appendLine(artista.name)
+                    appendLine(name)
 
                     bold { append("Listeners: ") }
-                    appendLine(artista.listeners)
+                    appendLine(listeners)
 
                     bold { append("Url: ") }
-                    appendLine(artista.url)
+                    appendLine(url)
 
                     bold { append("Streamable: ") }
-                    appendLine(artista.streamable)
+                    appendLine(streamable)
                 }
             }
         }

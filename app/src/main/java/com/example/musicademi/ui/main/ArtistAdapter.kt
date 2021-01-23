@@ -3,20 +3,18 @@ package com.example.musicademi.ui.main
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.demiter.domain.Artista
 import com.example.musicademi.*
-import com.example.musicademi.model.database.ArtistDb
-import com.example.musicademi.model.server.Artist
-import com.example.musicademi.model.server.Artista
 import com.example.musicademi.ui.common.basicDiffUtil
 import com.example.musicademi.ui.common.inflate
 import com.example.musicademi.ui.common.loadUrl
 import kotlinx.android.synthetic.main.view_artist.view.*
 
-class ArtistAdapter(private var listener: (ArtistDb) -> Unit): RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
+class ArtistAdapter(private var listener: (Artista) -> Unit): RecyclerView.Adapter<ArtistAdapter.MyViewHolder>() {
 
-    var artists: List<ArtistDb> by basicDiffUtil(
+    var artists: List<Artista> by basicDiffUtil(
             emptyList(),
-            areItemsTheSamee = {old, new -> old.artista.mbid == new.artista.mbid } )
+            areItemsTheSamee = {old, new -> old.name == new.name } )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = parent.inflate(R.layout.view_artist,false)
@@ -32,9 +30,9 @@ class ArtistAdapter(private var listener: (ArtistDb) -> Unit): RecyclerView.Adap
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(artist: ArtistDb){
-            itemView.artistTitle.text = artist.artista.name
-            itemView.artistCover.loadUrl(artist.imageArtist[1].text)
+        fun bind(artist: Artista){
+            itemView.artistTitle.text = artist.name
+            itemView.artistCover.loadUrl(artist.image[1].text)
         }
     }
 }

@@ -4,12 +4,20 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.demiter.data.repository.AlbumsRepository
+import com.demiter.data.repository.ArtistRepository
+import com.demiter.data.repository.RegionRepository
+import com.demiter.usescases.FindArtistByMbid
+import com.demiter.usescases.GetPopularAlbums
+import com.demiter.usescases.ToggleArtistFavorite
 import com.example.musicademi.R
-import com.example.musicademi.model.server.Artista
+import com.example.musicademi.model.AndroidPermissionChecker
+import com.example.musicademi.model.PlayServicesLocationDataSource
+import com.example.musicademi.model.database.RoomDataSource
+import com.example.musicademi.model.server.ServerDataSource
+import com.example.musicademi.ui.common.app
 import com.example.musicademi.ui.common.getViewModel
 import com.example.musicademi.ui.common.loadUrl
-import com.example.musicademi.model.server.AlbumsRepository
-import com.example.musicademi.ui.common.app
 import com.example.musicademi.ui.main.AlbumsAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.lang.IllegalStateException
@@ -17,7 +25,9 @@ import java.lang.IllegalStateException
 class DetailActivity : AppCompatActivity(){
 
     companion object{
-        const val ARTIST = "DetailActivity:artist"
+        const val MBID = "DetailActivity:mbidartist"
+        const val NAME = "DetailActivity:nameartist"
+
     }
 
     private lateinit var viewModel: DetailViewModel
@@ -29,8 +39,30 @@ class DetailActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        val mbidArtista = intent.getStringExtra(MBID) ?: throw (IllegalStateException("mbid not found"))
+        val name = intent.getStringExtra(NAME)?: throw (IllegalStateException("name not found"))
+
+
+        val artistRepository = ArtistRepository(
+            RoomDataSource(app.db),
+            ServerDataSource(),
+            RegionRepository(PlayServicesLocationDataSource(app),AndroidPermissionChecker(app)),
+            app.getString(R.string.apy_key)
+        )
+        val albumsRepository = AlbumsRepository(
+            RoomDataSource(app.db),
+            ServerDataSource(),
+            name,
+            app.getString(R.string.apy_key)
+        )
+
         viewModel = getViewModel {
-            DetailViewModel(AlbumsRepository(app),intent.getStringExtra(ARTIST) ?: throw (IllegalStateException("id not found")))
+            DetailViewModel(
+                mbidArtista,
+                FindArtistByMbid(artistRepository),
+                GetPopularAlbums(albumsRepository),
+                ToggleArtistFavorite(artistRepository)
+            )
         }
         albumsAdapter = AlbumsAdapter()
         recyclerAlbums.adapter = albumsAdapter
@@ -39,15 +71,21 @@ class DetailActivity : AppCompatActivity(){
     }
 
     private fun updateUi(uiModel: DetailViewModel.UiModel) {
+        uiModel
         when(uiModel){
             is DetailViewModel.UiModel.TheArtist ->
-                with(uiModel.artistaDb){
-                artistDetailToolbar.title = this.artista.name
-                artistDetailImage.loadUrl(this.imageArtist.get(2).text)
+                with(uiModel.artista){
+                artistDetailToolbar.title = this.name
+                artistDetailImage.loadUrl(this.image.get(1).text)
                 artistDetailInfo.setArtist(this)
-                    artistDetailFavorite.setImageDrawable(getDrawable(if (this.artista.favorite)R.drawable.ic_favorite_on else R.drawable.ic_favorite_off))
+                   // artistDetailFavorite.setImageDrawable(getDrawable(if (this.favorite)R.drawable.ic_favorite_on else R.drawable.ic_favorite_off))
             }
-            is DetailViewModel.UiModel.Content -> albumsAdapter.albums = uiModel.albums
+
+            is DetailViewModel.UiModel.Content -> {
+                val  l = uiModel.albums
+                l
+                albumsAdapter.albums = uiModel.albums
+            }
         }
     }
 }

@@ -103,7 +103,9 @@ class ImageArtist() {
         "Drake",
         "https://lastfm.freetls.fastly.net/i/u/ar0/1f3367f2531ed9eaa1fccb14fdc74063.webp",
         "Foals",
-        "https://lastfm.freetls.fastly.net/i/u/ar0/5fdb928de2f8398b8a2014320c513890.webp"
+        "https://lastfm.freetls.fastly.net/i/u/ar0/5fdb928de2f8398b8a2014320c513890.webp",
+        "Metallica",
+        "https://lastfm.freetls.fastly.net/i/u/ar0/0c4edc4a42e94732b2da6692f8f19bf8.jpg"
 
     )
 
