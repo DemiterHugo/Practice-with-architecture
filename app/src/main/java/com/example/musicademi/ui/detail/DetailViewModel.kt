@@ -8,8 +8,8 @@ import com.demiter.usescases.FindArtistByMbid
 import com.demiter.usescases.GetPopularAlbums
 import com.demiter.usescases.GetPopularArtists
 import com.demiter.usescases.ToggleArtistFavorite
-import com.example.musicademi.model.database.AlbumDb
-import com.example.musicademi.model.database.ArtistDb
+import com.example.musicademi.model.database.Album as RoomAlbum
+import com.example.musicademi.model.database.Artista as RoomArtist
 import com.example.musicademi.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
 
@@ -19,7 +19,6 @@ class DetailViewModel(
     private val getPopularAlbums: GetPopularAlbums,
     private val toggleArtistFavorite: ToggleArtistFavorite
 ) :ScopedViewModel() {
-
 
 
     private val _model = MutableLiveData<UiModel>()
@@ -36,25 +35,17 @@ class DetailViewModel(
 
     private fun refreshDetail (){
         launch {
-
             _model.value = UiModel.TheArtist(findArtistByMbid.invoke(mbidbartista))
-            val l = UiModel.Content(getPopularAlbums.invoke())
-            l
-            _model.value = l
+            _model.value = UiModel.Content(getPopularAlbums.invoke())
         }
     }
 
-    fun onFavoriteClicked(){
-        launch {
-                _model.value = UiModel.TheArtist(toggleArtistFavorite.invoke(findArtistByMbid.invoke(mbidbartista)))
-        }
+    fun onFavoriteClicked()=launch {
+            var art = toggleArtistFavorite.invoke(findArtistByMbid.invoke(mbidbartista))
+            _model.value = UiModel.TheArtist(art)
     }
-
 }
 
-    /*override fun onCleared() {
-        cancelScope()
-        super.onCleared()
-    }*/
+
 
 

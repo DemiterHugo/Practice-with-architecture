@@ -3,7 +3,7 @@ package com.example.musicademi.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.demiter.usescases.GetPopularArtists
-import com.example.musicademi.model.database.ArtistDb
+import com.example.musicademi.model.database.Artista as RoomArtist
 import com.example.musicademi.ui.common.Event
 import com.example.musicademi.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch

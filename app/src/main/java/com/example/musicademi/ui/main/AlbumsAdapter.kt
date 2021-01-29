@@ -46,7 +46,7 @@ class AlbumsAdapter: RecyclerView.Adapter<AlbumsAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(album: Album){
             itemView.albumTitle.text = album.name
-            itemView.albumCover.loadUrl(album.image[1].text)
+            itemView.albumCover.loadUrl(album.image)
         }
 
     }

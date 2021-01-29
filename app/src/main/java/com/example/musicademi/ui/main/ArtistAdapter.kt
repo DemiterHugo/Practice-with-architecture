@@ -32,7 +32,7 @@ class ArtistAdapter(private var listener: (Artista) -> Unit): RecyclerView.Adapt
 
         fun bind(artist: Artista){
             itemView.artistTitle.text = artist.name
-            itemView.artistCover.loadUrl(artist.image[1].text)
+            itemView.artistCover.loadUrl(artist.image)
         }
     }
 }

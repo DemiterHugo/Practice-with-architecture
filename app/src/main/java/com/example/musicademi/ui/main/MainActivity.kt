@@ -25,15 +25,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    //private lateinit var viewModel: MainViewModel
     private lateinit var artistAdapter: ArtistAdapter
     private val coarsePermissionRequester = PermissionRequester(this,ACCESS_COARSE_LOCATION)
+    private lateinit var component: MainActivityComponent
+    private val viewModel: MainViewModel by lazy { getViewModel { component.mainViewModel } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-         viewModel = getViewModel{
+        component = app.component.plus(MainActivityModule())
+
+         /*viewModel = getViewModel{
              MainViewModel(
                  GetPopularArtists(
                      ArtistRepository(RoomDataSource(app.db),
@@ -44,7 +48,8 @@ class MainActivity : AppCompatActivity() {
                      )
                  )
              )
-         }
+         }*/
+
         artistAdapter = ArtistAdapter { viewModel.onArtistClicked(it) }
         recyclerArtist.adapter = artistAdapter
         viewModel.model.observe(this, Observer (::updateUi))

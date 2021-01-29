@@ -3,6 +3,7 @@ package com.example.musicademi.ui.detail
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.demiter.data.repository.AlbumsRepository
 import com.demiter.data.repository.ArtistRepository
@@ -30,9 +31,10 @@ class DetailActivity : AppCompatActivity(){
 
     }
 
-    private lateinit var viewModel: DetailViewModel
+    //private lateinit var viewModel: DetailViewModel
     private lateinit var albumsAdapter: AlbumsAdapter
-
+    private lateinit var component1: DetailActivityComponent
+    private val viewModel by lazy { getViewModel { component1.detailViewModel } }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +44,10 @@ class DetailActivity : AppCompatActivity(){
         val mbidArtista = intent.getStringExtra(MBID) ?: throw (IllegalStateException("mbid not found"))
         val name = intent.getStringExtra(NAME)?: throw (IllegalStateException("name not found"))
 
+        component1 = app.component.plus(DetailActivityModule(mbidArtista,name))
 
-        val artistRepository = ArtistRepository(
+
+        /*val artistRepository = ArtistRepository(
             RoomDataSource(app.db),
             ServerDataSource(),
             RegionRepository(PlayServicesLocationDataSource(app),AndroidPermissionChecker(app)),
@@ -63,7 +67,7 @@ class DetailActivity : AppCompatActivity(){
                 GetPopularAlbums(albumsRepository),
                 ToggleArtistFavorite(artistRepository)
             )
-        }
+        }*/
         albumsAdapter = AlbumsAdapter()
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))
@@ -71,19 +75,20 @@ class DetailActivity : AppCompatActivity(){
     }
 
     private fun updateUi(uiModel: DetailViewModel.UiModel) {
-        uiModel
+
         when(uiModel){
             is DetailViewModel.UiModel.TheArtist ->
                 with(uiModel.artista){
                 artistDetailToolbar.title = this.name
-                artistDetailImage.loadUrl(this.image.get(1).text)
+                artistDetailImage.loadUrl(this.image)
                 artistDetailInfo.setArtist(this)
-                   // artistDetailFavorite.setImageDrawable(getDrawable(if (this.favorite)R.drawable.ic_favorite_on else R.drawable.ic_favorite_off))
+
+                    val icon = if (this.favorite)R.drawable.ic_favorite_on else R.drawable.ic_favorite_off
+                    artistDetailFavorite.setImageDrawable(ContextCompat.getDrawable(this@DetailActivity,icon))
             }
 
             is DetailViewModel.UiModel.Content -> {
-                val  l = uiModel.albums
-                l
+
                 albumsAdapter.albums = uiModel.albums
             }
         }
