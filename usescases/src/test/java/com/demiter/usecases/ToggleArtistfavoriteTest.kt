@@ -1,10 +1,12 @@
 package com.demiter.usecases
 
 import com.demiter.data.repository.ArtistRepository
+import com.demiter.lib.mockedArtist
 import com.demiter.usescases.ToggleArtistFavorite
 import com.nhaarman.mockitokotlin2.verify
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
+
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test

@@ -11,14 +11,16 @@ import com.demiter.usescases.ToggleArtistFavorite
 import com.example.musicademi.model.database.Album as RoomAlbum
 import com.example.musicademi.model.database.Artista as RoomArtist
 import com.example.musicademi.ui.common.ScopedViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
     private val mbidbartista: String,
     private val findArtistByMbid: FindArtistByMbid,
     private val getPopularAlbums: GetPopularAlbums,
-    private val toggleArtistFavorite: ToggleArtistFavorite
-) :ScopedViewModel() {
+    private val toggleArtistFavorite: ToggleArtistFavorite,
+    override val uiDispatcher: CoroutineDispatcher
+) :ScopedViewModel(uiDispatcher) {
 
 
     private val _model = MutableLiveData<UiModel>()
@@ -29,8 +31,8 @@ class DetailViewModel(
     }
 
     sealed class UiModel(){
-        class Content(val albums:List<Album>): UiModel()
-        class TheArtist(val artista: Artista): UiModel()
+        data class Content(val albums:List<Album>): UiModel()
+        data class TheArtist(val artista: Artista): UiModel()
     }
 
     private fun refreshDetail (){

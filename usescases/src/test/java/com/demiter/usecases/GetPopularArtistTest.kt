@@ -1,9 +1,10 @@
 package com.demiter.usecases
 
 import com.demiter.data.repository.ArtistRepository
+import com.demiter.lib.mockedArtist
 import com.demiter.usescases.GetPopularArtists
 import com.nhaarman.mockitokotlin2.whenever
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test

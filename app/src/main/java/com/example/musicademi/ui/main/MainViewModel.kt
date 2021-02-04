@@ -8,10 +8,11 @@ import com.example.musicademi.ui.common.Event
 import com.example.musicademi.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
 import com.demiter.domain.Artista
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MainViewModel(private val getPopularArtists: GetPopularArtists): ScopedViewModel() {
+class MainViewModel(private val getPopularArtists: GetPopularArtists, uiDispatcher: CoroutineDispatcher): ScopedViewModel(uiDispatcher) {
 
 
     private val _model = MutableLiveData<UiModel>()
@@ -32,7 +33,7 @@ class MainViewModel(private val getPopularArtists: GetPopularArtists): ScopedVie
 
     sealed class UiModel{
         object Loading: UiModel()
-        class Content(val artists: List<Artista>): UiModel()
+        data class Content(val artists: List<Artista>): UiModel()
         object RequestLocationPermission: UiModel()
     }
 

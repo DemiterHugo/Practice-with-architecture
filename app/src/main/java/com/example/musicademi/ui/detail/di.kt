@@ -11,6 +11,7 @@ import com.example.musicademi.ui.common.ScopedViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
 @Module
@@ -28,9 +29,10 @@ class DetailActivityModule(private val mbidbartista:String, private val nameArti
     fun detailViewModelProvider(
         findArtistByMbid: FindArtistByMbid,
         getPopularAlbums: GetPopularAlbums,
-        toggleArtistFavorite: ToggleArtistFavorite
+        toggleArtistFavorite: ToggleArtistFavorite,
+        uiDispatcher: CoroutineDispatcher
     ):DetailViewModel{
-        return DetailViewModel(mbidbartista,findArtistByMbid,getPopularAlbums,toggleArtistFavorite)
+        return DetailViewModel(mbidbartista,findArtistByMbid,getPopularAlbums,toggleArtistFavorite,uiDispatcher)
     }
 
     @Provides

@@ -2,7 +2,7 @@ package com.demiter.data.repository
 
 import com.demiter.data.source.LocalDataSource
 import com.demiter.data.source.RemoteDataSource
-import com.demiter.domain.Artista
+import com.demiter.lib.mockedArtist
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -12,7 +12,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoJUnitRunner
 
 
@@ -27,16 +26,7 @@ class ArtistsRepositoryTest {
 
     lateinit var artistRepository: ArtistRepository
     private val apiKey = "r4r4r4r4fefe"
-    private val mockedArtist = Artista(
-        0,
-        "Juan",
-        "2",
-        "555c555",
-        "urlMusic",
-        "22",
-        false,
-        "urlImage"
-    )
+
 
     @Before
     fun setUp(){

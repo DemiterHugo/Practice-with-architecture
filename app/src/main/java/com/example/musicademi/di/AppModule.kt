@@ -16,6 +16,8 @@ import com.example.musicademi.model.server.TheMusicDb
 import com.example.musicademi.model.server.TheTopArtistsDbResult
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -47,4 +49,9 @@ class AppModule {
     @Provides
     fun permissionCheckerProvider(app: Application): PermissionChecker
             = AndroidPermissionChecker(app)
+
+    @Provides
+    @Singleton
+    fun coroutineDispatcherProvider():CoroutineDispatcher
+    = Dispatchers.Main
 }
