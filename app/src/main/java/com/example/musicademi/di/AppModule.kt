@@ -39,8 +39,8 @@ class AppModule {
             = RoomDataSource(db)
 
     @Provides
-    fun remoteDataSourceProvider():RemoteDataSource
-            = ServerDataSource()        //TheMovieDbDataSource
+    fun remoteDataSourceProvider(theMusicDb: TheMusicDb):RemoteDataSource
+            = ServerDataSource(theMusicDb)        //TheMovieDbDataSource
 
     @Provides
     fun locationDataSourceProvider(app: Application): LocationDataSource
@@ -54,4 +54,15 @@ class AppModule {
     @Singleton
     fun coroutineDispatcherProvider():CoroutineDispatcher
     = Dispatchers.Main
+
+    @Provides
+    @Singleton
+    @Named("baseUrl")
+    fun baseUrlProvider(): String = "http://ws.audioscrobbler.com/2.0/"
+
+    @Provides
+    @Singleton
+    fun theMusicDbProvider(@Named("baseUrl")baseUrl: String):TheMusicDb{
+       return TheMusicDb( baseUrl)
+    }
 }

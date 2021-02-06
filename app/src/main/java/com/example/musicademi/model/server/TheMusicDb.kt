@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object TheMusicDb {
+class TheMusicDb(baseUrl: String) {
 
     private val okHttpClient = HttpLoggingInterceptor().run {
         level = HttpLoggingInterceptor.Level.BODY
@@ -14,7 +14,8 @@ object TheMusicDb {
 
     val service: TheMusicDbService = Retrofit
         .Builder()
-        .baseUrl("http://ws.audioscrobbler.com/2.0/")
+        //.baseUrl("http://ws.audioscrobbler.com/2.0/")
+        .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

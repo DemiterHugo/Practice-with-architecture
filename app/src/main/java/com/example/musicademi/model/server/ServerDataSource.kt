@@ -8,12 +8,12 @@ import com.demiter.domain.Album as DomainAlbum
 import com.example.musicademi.model.server.Artista as ServerArtista
 import com.example.musicademi.model.server.Album as ServerAlbum
 
-class ServerDataSource: RemoteDataSource {
+class ServerDataSource(private val theMusicDb: TheMusicDb): RemoteDataSource {
 
 
 
     override suspend fun getPopularArtists(apiKey: String, region: String): List<DomainArtist> {
-          return TheMusicDb.service.listTopArtistsAsync(
+          return theMusicDb.service.listTopArtistsAsync(
               region,
             apiKey
           ).topartists.artists.map { artista -> serverToDomainArtist(artista) }
@@ -22,7 +22,7 @@ class ServerDataSource: RemoteDataSource {
     }
 
     override suspend fun getPopularAlbums(name: String, apikey: String): List<DomainAlbum> {
-        return TheMusicDb.service.listTopAlbumsAsync(
+        return theMusicDb.service.listTopAlbumsAsync(
             name,
             apikey
         ).topalbums.albums.map { album -> album.serverToDomainAlbum() }
