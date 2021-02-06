@@ -2,7 +2,7 @@ package com.example.musicademi.di
 
 import com.demiter.data.repository.AlbumsRepository
 import com.demiter.data.repository.ArtistRepository
-import com.demiter.data.repository.PermissionChecker
+import com.demiter.data.source.PermissionChecker
 import com.demiter.data.repository.RegionRepository
 import com.demiter.data.source.LocalDataSource
 import com.demiter.data.source.LocationDataSource

@@ -1,7 +1,8 @@
 package com.demiter.data.repository
 
-import com.demiter.data.repository.PermissionChecker.Permission.COARSE_LOCATION
+import com.demiter.data.source.PermissionChecker.Permission.COARSE_LOCATION
 import com.demiter.data.source.LocationDataSource
+import com.demiter.data.source.PermissionChecker
 
 class RegionRepository(
     private val locationDataSource: LocationDataSource,
@@ -20,9 +21,3 @@ class RegionRepository(
     }
 }
 
-interface PermissionChecker{
-
-    enum class Permission{ COARSE_LOCATION }
-
-    suspend fun check(permission: Permission): Boolean
-}

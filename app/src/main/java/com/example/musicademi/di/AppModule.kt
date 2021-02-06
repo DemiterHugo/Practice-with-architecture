@@ -2,7 +2,7 @@ package com.example.musicademi.di
 
 import android.app.Application
 import androidx.room.Room
-import com.demiter.data.repository.PermissionChecker
+import com.demiter.data.source.PermissionChecker
 import com.demiter.data.source.LocalDataSource
 import com.demiter.data.source.LocationDataSource
 import com.demiter.data.source.RemoteDataSource
