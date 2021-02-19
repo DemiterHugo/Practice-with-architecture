@@ -36,17 +36,16 @@ class UiTest: KoinTest  {
             )
         )
         .around(ActivityScenarioRule(MainActivity::class.java))
-        //.around(mockWebServerRule)
-        //.around(ActivityScenarioRule(DetailActivity::class.java))
+
 
     @Before
     fun setUp() {
         mockWebServerRule.server.enqueue(
             MockResponse().fromJson("popularArtists.json")
             )
-       /* mockWebServerRule.server.enqueue(
-            MockResponse().fromJson("popularAlbums.json"),
-        )*/
+        mockWebServerRule.server.enqueue(
+            MockResponse().fromJson("popularAlbums.json")
+        )
 
         val resource = OkHttp3IdlingResource.create("OkHttp", get<TheMusicDb>().okHttpClient)
         IdlingRegistry.getInstance().register(resource)
@@ -54,23 +53,15 @@ class UiTest: KoinTest  {
 
     @Test
     fun clickArtistNavigatesToDetail() {
-       /* mockWebServerRule.server.enqueue(
-            MockResponse().fromJson("popularArtists.json")
-        )*/
-
 
         onView(withId(R.id.recyclerArtist)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                2,
+                1,
                 click()
             )
         )
 
-        mockWebServerRule.server.enqueue(
-            MockResponse().fromJson("popularAlbums.json")
-        )
-
         onView(withId(R.id.artistDetailToolbar))
-            .check(matches(withChild(withText("Radiohead"))))
+            .check(matches(hasDescendant(withText("Radiohead"))))
     }
 }
