@@ -7,7 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class TheMusicDb(baseUrl: String) {
 
-    private val okHttpClient = HttpLoggingInterceptor().run {
+    //private
+    val okHttpClient = HttpLoggingInterceptor().run {
         level = HttpLoggingInterceptor.Level.BODY
         OkHttpClient.Builder().addInterceptor(this).build()
     }

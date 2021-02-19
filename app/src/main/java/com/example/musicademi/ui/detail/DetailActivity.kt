@@ -21,53 +21,30 @@ import com.example.musicademi.ui.common.getViewModel
 import com.example.musicademi.ui.common.loadUrl
 import com.example.musicademi.ui.main.AlbumsAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
+import org.koin.androidx.scope.ScopeActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.lang.IllegalStateException
 
-class DetailActivity : AppCompatActivity(){
+class DetailActivity : ScopeActivity(){
 
     companion object{
         const val MBID = "DetailActivity:mbidartist"
         const val NAME = "DetailActivity:nameartist"
-
     }
 
-    //private lateinit var viewModel: DetailViewModel
+
     private lateinit var albumsAdapter: AlbumsAdapter
-    private lateinit var component1: DetailActivityComponent
-    private val viewModel by lazy { getViewModel { component1.detailViewModel } }
+    private val viewModel: DetailViewModel by viewModel{
+        parametersOf(intent.getStringExtra(MBID))
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        val mbidArtista = intent.getStringExtra(MBID) ?: throw (IllegalStateException("mbid not found"))
-        val name = intent.getStringExtra(NAME)?: throw (IllegalStateException("name not found"))
 
-        component1 = app.component.plus(DetailActivityModule(mbidArtista,name))
-
-
-        /*val artistRepository = ArtistRepository(
-            RoomDataSource(app.db),
-            ServerDataSource(),
-            RegionRepository(PlayServicesLocationDataSource(app),AndroidPermissionChecker(app)),
-            app.getString(R.string.apy_key)
-        )
-        val albumsRepository = AlbumsRepository(
-            RoomDataSource(app.db),
-            ServerDataSource(),
-            name,
-            app.getString(R.string.apy_key)
-        )
-
-        viewModel = getViewModel {
-            DetailViewModel(
-                mbidArtista,
-                FindArtistByMbid(artistRepository),
-                GetPopularAlbums(albumsRepository),
-                ToggleArtistFavorite(artistRepository)
-            )
-        }*/
         albumsAdapter = AlbumsAdapter()
         recyclerAlbums.adapter = albumsAdapter
         viewModel.model.observe(this, Observer(::updateUi))

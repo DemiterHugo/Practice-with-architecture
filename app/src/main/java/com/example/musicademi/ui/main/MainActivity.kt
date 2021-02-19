@@ -21,21 +21,24 @@ import com.example.musicademi.ui.common.startActivity
 import com.example.musicademi.ui.detail.DetailActivity
 import com.example.musicademi.ui.main.MainViewModel.UiModel.*
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.scope.ScopeActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ScopeActivity() {
 
     //private lateinit var viewModel: MainViewModel
     private lateinit var artistAdapter: ArtistAdapter
     private val coarsePermissionRequester = PermissionRequester(this,ACCESS_COARSE_LOCATION)
-    private lateinit var component: MainActivityComponent
-    private val viewModel: MainViewModel by lazy { getViewModel { component.mainViewModel } }
+    //private lateinit var component: MainActivityComponent
+    //private val viewModel: MainViewModel by lazy { getViewModel { component.mainViewModel } }
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        component = app.component.plus(MainActivityModule())
+        //component = app.component.plus(MainActivityModule())
 
          /*viewModel = getViewModel{
              MainViewModel(

@@ -9,14 +9,10 @@ import com.example.musicademi.model.database.MusicDatabase
 
 class MusicApp: Application() {
 
-    lateinit var component: MyMusicsComponent
-    private set
+
 
     override fun onCreate() {
         super.onCreate()
-
-        component = DaggerMyMusicsComponent
-            .factory()
-            .create(this)
+        initDI()
     }
 }
